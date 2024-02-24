@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.web.config.name }}
+  labels:
+    group: frontend
+data: 
+{{- range .Values.web.config.data }}
+  {{ .key }}: "{{ .value }}"
+{{- end}}

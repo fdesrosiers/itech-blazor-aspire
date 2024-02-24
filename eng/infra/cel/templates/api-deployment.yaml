@@ -1,0 +1,31 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apiservice
+  labels:
+    app: apiservice
+    group: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apiservice
+  template:
+    metadata:
+      labels:
+        app: apiservice
+    spec:
+      containers:
+        - name: apiservice
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.api.config.name }}          
+          ports:
+            - containerPort: {{.Values.api.image.targetPort}}
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
